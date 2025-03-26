@@ -1,21 +1,93 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import "./App.css";
 
 import { Toaster } from "react-hot-toast";
-import HomePage from "./pages/HomePage";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
+import HomepageLayout from "./layouts/HomepageLayout";
+import AboutLayout from "./layouts/AboutLayout";
+import ContactLayout from "./layouts/ContactLayout";
+
+import TrainerLogin from "./layouts/Auth/TrainerAuthLayout/TrainerLogin";
+// import TrainerSignup from "./layouts/Auth/TrainerAuthLayout/TrainerSignup";
+import NotFound from "./components/NotFound";
+import UserLogin from "./layouts/Auth/UserAuthLayout/UserLogin";
+// import UserSignup from "./layouts/Auth/UserAuthLayout/UserSignup";
+import UserDashboard from "./layouts/UserDashboard";
+import { useAuthHook } from "./hook/AuthHook";
+import { useEffect } from "react";
+import TrainerDashboard from "./layouts/TrainerDashboard";
 
 const App = () => {
+  const { loadingLogStatus, checkLogStatus, authUser, authType } =
+    useAuthHook();
+
+  useEffect(() => {
+    checkLogStatus();
+  }, [checkLogStatus]);
+
+  if (loadingLogStatus) {
+    return (
+      <div className="min-h-screen flex justify-center items-center text-2xl text-white bg-black font-extrabold">
+        <h1>Loading......</h1>
+      </div>
+    );
+  }
   return (
     <div>
       <Toaster />
       <Navbar />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/" element={<HomepageLayout />} />
+        <Route path="/about" element={<AboutLayout />} />
+        <Route path="/contact" element={<ContactLayout />} />
+
+        <Route
+          path="/user/login"
+          element={
+            !authUser ? (
+              <UserLogin />
+            ) : authType === "user" ? (
+              <Navigate to="/user/dashboard" />
+            ) : (
+              <Navigate to="/trainer/dashboard" />
+            )
+          }
+        />
+        <Route
+          path="/user/dashboard"
+          element={
+            authUser && authType === "user" ? (
+              <UserDashboard />
+            ) : (
+              <Navigate to={"/user/login"} />
+            )
+          }
+        />
+
+        <Route
+          path="/trainer/login"
+          element={
+            !authUser ? (
+              <TrainerLogin />
+            ) : authType === "user" ? (
+              <Navigate to="/user/dashboard" />
+            ) : (
+              <Navigate to="/trainer/dashboard" />
+            )
+          }
+        />
+        <Route
+          path="/trainer/dashboard"
+          element={
+            authUser && authType === "trainer" ? (
+              <TrainerDashboard />
+            ) : (
+              <Navigate to={"/trainer/login"} />
+            )
+          }
+        />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

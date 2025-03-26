@@ -1,2 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+@theme {
+  --color-main: #027a3c;
+  --color-second: #8ec63f;
+  --color-second-hi: #2f4858;
+  --color-highlight: #ff3737;
+}

@@ -11,6 +11,10 @@ const navLinks = [
     name: "Contact",
     link: "/contact",
   },
+  {
+    name: "Login as Trainer",
+    link: "/trainer/login",
+  },
 ];
 
 export default navLinks;

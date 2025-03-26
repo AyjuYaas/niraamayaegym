@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import navLinks from "./NavLinks";
+import { NavLink } from "react-router-dom";
+import navLinks from "../NavLinks";
 
 const NavStart = () => {
   return (
@@ -28,9 +28,9 @@ const NavStart = () => {
         >
           {navLinks.map((link, index) => (
             <li key={index}>
-              <Link to={link.link} className="text-lg">
+              <NavLink to={link.link} className="text-lg">
                 {link.name}
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ul>
