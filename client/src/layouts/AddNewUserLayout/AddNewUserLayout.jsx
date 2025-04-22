@@ -1,23 +1,31 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import genderData from "./genderData";
+import { useTrainerHook } from "../../hook/TrainerHook";
+import { useNavigate } from "react-router-dom";
 
-const UserSignup = () => {
+const AddNewUserLayout = () => {
+  const navigate = useNavigate();
+  const { loadAddUser, addUser } = useTrainerHook();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    password: "",
     phone: "",
     gender: "",
+    dob: "",
   });
 
   const handleFormDataChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    const success = await addUser(formData);
+
+    if (success) {
+      navigate("/trainer/dashboard");
+    }
   };
 
   return (
@@ -40,7 +48,7 @@ const UserSignup = () => {
                 id="name"
                 value={formData.name}
                 onChange={handleFormDataChange}
-                placeholder="Your Name"
+                placeholder="Customer's Name"
                 required
                 className="bg-gray-300 p-2 rounded-lg text-base"
               />
@@ -57,24 +65,7 @@ const UserSignup = () => {
                 id="email"
                 value={formData.email}
                 onChange={handleFormDataChange}
-                placeholder="Your Email"
-                required
-                className="bg-gray-300 p-2 rounded-lg text-base"
-              />
-            </div>
-
-            {/* Password */}
-            <div className="flex flex-col">
-              <label htmlFor="password" className="font-semibold ml-1">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                value={formData.password}
-                onChange={handleFormDataChange}
-                placeholder="Your Password"
+                placeholder="Customer's Email"
                 required
                 className="bg-gray-300 p-2 rounded-lg text-base"
               />
@@ -83,7 +74,7 @@ const UserSignup = () => {
             {/* Phone */}
             <div className="flex flex-col">
               <label htmlFor="phone" className="font-semibold ml-1">
-                Phone
+                Phone Number
               </label>
               <input
                 type="tel"
@@ -91,7 +82,7 @@ const UserSignup = () => {
                 id="phone"
                 value={formData.phone}
                 onChange={handleFormDataChange}
-                placeholder="Your Phone"
+                placeholder="Customer's Phone"
                 pattern="\d{10}" // Ensures exactly 10 digits
                 maxLength={10} // Prevents more than 10 digits
                 required
@@ -121,19 +112,32 @@ const UserSignup = () => {
               </div>
             </div>
 
-            <div>
-              <button className="py-3 px-10 bg-black text-white hover:bg-second cursor-pointer rounded-lg duration-150 font-bold">
-                Signup
-              </button>
+            {/* DOB */}
+            <div className="flex flex-col">
+              <label htmlFor="dob" className="font-semibold ml-1">
+                Date of Birth (AD)
+              </label>
+              <input
+                type="date"
+                name="dob"
+                id="dob"
+                value={formData.dob}
+                onChange={handleFormDataChange}
+                required
+                className="bg-gray-300 p-2 rounded-lg text-base [&::-webkit-calendar-picker-indicator]:invert"
+              />
             </div>
 
-            <div className="text-sm">
-              <Link
-                to="/user/login"
-                className="hover:underline hover:text-main"
-              >
-                Already have an Account? Click Here
-              </Link>
+            <div>
+              <input
+                type="submit"
+                className={`py-3 px-10 rounded-lg duration-150 font-bold ${
+                  loadAddUser
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-black text-white hover:bg-second cursor-pointer"
+                }`}
+                value={`${loadAddUser ? "Registering..." : "Register a User"}`}
+              />
             </div>
           </form>
         </div>
@@ -147,13 +151,13 @@ const UserSignup = () => {
           <div className="absolute inset-0 bg-black/80 z-2"></div>
 
           <div className="flex flex-col z-3 font-bold text-4xl lg:text-5xl gap-3">
-            <span className="pt-18 sm:pt-10">Signup to</span>
-            <span className="tracking-wider">Niraamayae</span>
-            <span>App</span>
+            <span className="pt-18 sm:pt-10">Register </span>
+            <span className="tracking-wider">a New</span>
+            <span>User</span>
           </div>
         </div>
       </div>
     </div>
   );
 };
-export default UserSignup;
+export default AddNewUserLayout;

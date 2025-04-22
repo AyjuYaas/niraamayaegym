@@ -10,7 +10,7 @@ const Navbar = () => {
       <NavStart />
 
       {/* Navbar Logo  */}
-      <div className="navbar-center">
+      <div className="navbar-center hidden sm:inline-block">
         <Link
           to={
             authType === "user"

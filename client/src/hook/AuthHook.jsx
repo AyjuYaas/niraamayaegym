@@ -13,7 +13,8 @@ export const useAuthHook = create((set) => ({
       const res = await axiosInstance.get("/auth/logStatus");
       set({ authUser: res.data.credentials, authType: res.data.authType });
     } catch (error) {
-      console.log(error);
+      set({ authUser: null, authType: "" });
+      console.log("No Authentication: " + error);
     } finally {
       set({ loadingLogStatus: false });
     }

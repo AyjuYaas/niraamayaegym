@@ -2,54 +2,12 @@ import Trainer from "../models/trainerModel.js";
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 
-const loginToken = (id, role) => {
+const loginToken = (id, authType) => {
   //jwt token
-  return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+  return jwt.sign({ id, authType }, process.env.JWT_SECRET, {
     expiresIn: "14d",
   });
 };
-
-export async function userSignup(req, res) {
-  try {
-    const { name, email, password, phone, gender } = req.body;
-
-    if (!name || !email || !password || !phone || !gender) {
-      return res.status(400).json({
-        success: false,
-        message: "All the input is required",
-      });
-    }
-
-    if (password.length < 7) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must be more than 7 characters",
-      });
-    }
-
-    const newUser = await User.create({
-      name,
-      email,
-      password,
-      phone,
-      gender,
-    });
-
-    return res.status(200).json({
-      success: true,
-      user: newUser,
-    });
-  } catch (error) {
-    if (error.keyPattern && error.keyPattern.email) {
-      return res.status(400).json({
-        success: false,
-        message: "Email already exists. Please use a different email address.",
-      });
-    }
-    console.log("Error in User Signup Controller: " + error);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-}
 
 export async function userLogin(req, res) {
   try {
@@ -83,9 +41,12 @@ export async function userLogin(req, res) {
       success: true,
       credentials: {
         _id: user._id,
+        profilePic: user.profilePic,
         name: user.name,
-        email: user.email,
-        gender: user.gender,
+        height: user.height,
+        weight: user.weight,
+        BMI: user.BMI,
+        defaultId: user.defaultId,
       },
       authType: "user",
     });
@@ -196,7 +157,7 @@ export async function logout(req, res) {
 
 export async function logStatus(req, res) {
   try {
-    if (!req.credentials || !req.role) {
+    if (!req.credentials || !req.authType) {
       return res.status(401).json({
         success: false,
         message: "Not Authorized",
@@ -206,7 +167,7 @@ export async function logStatus(req, res) {
     res.status(200).json({
       success: true,
       credentials: req.credentials,
-      role: req.role,
+      authType: req.authType,
     });
   } catch (error) {
     console.error("Error in auth controller, logStatus: ", error);

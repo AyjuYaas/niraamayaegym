@@ -16,6 +16,8 @@ import UserDashboard from "./layouts/UserDashboard";
 import { useAuthHook } from "./hook/AuthHook";
 import { useEffect } from "react";
 import TrainerDashboard from "./layouts/TrainerDashboard";
+import AddNewUserLayout from "./layouts/AddNewUserLayout";
+import AddUserTask from "./layouts/AddUserTask";
 
 const App = () => {
   const { loadingLogStatus, checkLogStatus, authUser, authType } =
@@ -81,6 +83,26 @@ const App = () => {
           element={
             authUser && authType === "trainer" ? (
               <TrainerDashboard />
+            ) : (
+              <Navigate to={"/trainer/login"} />
+            )
+          }
+        />
+        <Route
+          path="/trainer/add-user"
+          element={
+            authUser && authType === "trainer" ? (
+              <AddNewUserLayout />
+            ) : (
+              <Navigate to={"/trainer/login"} />
+            )
+          }
+        />
+        <Route
+          path="/trainer/assign-user/:userId"
+          element={
+            authUser && authType === "trainer" ? (
+              <AddUserTask />
             ) : (
               <Navigate to={"/trainer/login"} />
             )
