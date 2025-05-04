@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import { useTrainerHook } from "../../../hook/TrainerHook";
-import defaultUserImage from "/default-user.jpg";
-import { Link } from "react-router-dom";
+import { useTrainerHook } from "../../../hook/useTrainerHook";
+import SingleUser from "./SingleUser";
 
 const AssignedUsers = ({ searchQuery }) => {
   const { assignedUsers, getAssignedUsers, loadingAssignedUsers } =
@@ -16,8 +15,8 @@ const AssignedUsers = ({ searchQuery }) => {
   );
 
   return (
-    <div className="flex flex-col gap-5 w-full px-4">
-      <div className="flex justify-between gap-5">
+    <div className="flex flex-col gap-5 w-full px-4 mt-5">
+      <div className="flex justify-between gap-5 self-center lg:self-start">
         <h1 className="text-2xl font-bold tracking-wide">Assigned Users</h1>
       </div>
 
@@ -26,22 +25,10 @@ const AssignedUsers = ({ searchQuery }) => {
           <span className="loading loading-bars loading-xl"></span>
         </div>
       ) : (
-        <div className="flex flex-wrap justify-start w-full gap-3">
+        <div className="flex flex-wrap justify-center lg:justify-start w-full gap-5">
           {filteredUsers.length > 0 ? (
             filteredUsers.map((user, index) => (
-              <Link
-                key={index}
-                className="relative h-max bg-white rounded-lg shadow-lg shadow-gray-600 text-black p-4 py-7 flex flex-col justify-center items-center cursor-pointer transform hover:-translate-y-2 transition-all duration-75 font-medium text-lg w-50"
-                to={`/trainer/assign-user/${user._id}`}
-              >
-                <img
-                  src={user.image || defaultUserImage}
-                  alt={user.name}
-                  className="size-30 rounded-full mb-2"
-                />
-                <h1>{user.name}</h1>
-                <p className="font-light">{user.gender}</p>
-              </Link>
+              <SingleUser user={user} key={index} />
             ))
           ) : (
             <p className="text-gray-500 text-lg mt-4">No users found.</p>

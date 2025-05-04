@@ -23,6 +23,18 @@ export async function assignTask(req, res) {
       });
     }
 
+    const existingTask = await Task.findOne({
+      userId,
+      day,
+    });
+
+    if (existingTask) {
+      return res.status(400).json({
+        success: false,
+        message: "A task is already assigned to this user on " + day,
+      });
+    }
+
     const task = await Task.create({
       userId,
       assignedBy,
@@ -62,6 +74,15 @@ export async function getTask(req, res) {
 
     res.status(200).json({
       success: true,
+      user: {
+        _id: user._id,
+        profilePic: user.profilePic,
+        name: user.name,
+        gender: user.gender,
+        age: user.age,
+        height: user.height,
+        weight: user.weight,
+      },
       tasks,
     });
   } catch (error) {
@@ -121,6 +142,26 @@ export async function updateTask(req, res) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
+      });
+    }
+
+    const toBeUpdatedTask = await Task.findById(taskId);
+    if (!toBeUpdatedTask) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found",
+      });
+    }
+    const existingTask = await Task.findOne({
+      userId: toBeUpdatedTask.userId,
+      day,
+      _id: { $ne: taskId },
+    });
+
+    if (existingTask) {
+      return res.status(409).json({
+        success: false,
+        message: `A task is already assigned to this user on ${day}`,
       });
     }
 

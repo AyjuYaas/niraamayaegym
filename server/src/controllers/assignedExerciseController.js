@@ -1,6 +1,7 @@
 import AssignedExercise from "../models/assignedExerciseModel.js";
 import Exercise from "../models/exerciseModel.js";
 import Task from "../models/taskModel.js";
+import User from "../models/userModel.js";
 
 export async function assignExercise(req, res) {
   try {
@@ -30,9 +31,13 @@ export async function assignExercise(req, res) {
       reps,
     });
 
+    const populatedAssignedExercise = await AssignedExercise.findById(
+      assignedExercise._id
+    ).populate("exerciseId");
+
     res.status(200).json({
       success: true,
-      assignedExercise,
+      assignedExercise: populatedAssignedExercise,
     });
   } catch (error) {
     console.log(
@@ -49,12 +54,35 @@ export async function getAssignedExercise(req, res) {
   try {
     const { taskId } = req.params;
 
-    const assignedExercises = await AssignedExercise.find({ taskId: taskId })
-      .populate("taskId", "day title")
-      .populate("exerciseId", "name bodyPart description videos");
+    const task = await Task.findById(taskId).select(
+      "_id userId day title assignedBy"
+    );
+
+    if (!task) {
+      return res.status(404).json({
+        success: false,
+        message: "Task is not valid",
+      });
+    }
+    const user = await User.findById(task.userId).select(
+      "profilePic name height weight age gender"
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User Not Found",
+      });
+    }
+
+    const assignedExercises = await AssignedExercise.find({
+      taskId: taskId,
+    }).populate("exerciseId", "name bodyPart description videos");
 
     res.status(200).json({
       success: true,
+      task,
+      user,
       assignedExercises,
     });
   } catch (error) {
@@ -115,29 +143,20 @@ export async function updateAssignedExercise(req, res) {
       });
     }
 
-    const { exerciseId, sets, reps } = req.body;
+    const { sets, reps } = req.body;
 
-    if (!exerciseId || !sets || !reps) {
+    if (!sets || !reps) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
     }
 
-    const exercise = await Exercise.findById(exerciseId);
-
-    if (!exercise) {
-      return res.status(404).json({
-        success: false,
-        message: "Task or Exercise is not valid",
-      });
-    }
-
     const assignedExercise = await AssignedExercise.findByIdAndUpdate(
       assignedExerciseId,
-      { exerciseId, sets, reps },
+      { sets, reps },
       { new: true }
-    );
+    ).populate("exerciseId");
 
     res.status(200).json({
       success: true,

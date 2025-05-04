@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import NavProfile from "./components/NavProfile";
 import NavStart from "./components/NavStart";
-import { useAuthHook } from "../../hook/AuthHook";
+import { useAuthHook } from "../../hook/useAuthHook";
 
 const Navbar = () => {
   const { authType } = useAuthHook();
@@ -10,7 +10,7 @@ const Navbar = () => {
       <NavStart />
 
       {/* Navbar Logo  */}
-      <div className="navbar-center hidden sm:inline-block">
+      <div className="navbar-center sm:inline-block">
         <Link
           to={
             authType === "user"

@@ -1,3 +1,4 @@
+import AssignedExercise from "../models/assignedExerciseModel.js";
 import Exercise from "../models/exerciseModel.js";
 
 export async function addExercise(req, res) {
@@ -109,11 +110,16 @@ export async function deleteExercise(req, res) {
       });
     }
 
+    // Delete the exercise
     await exercise.deleteOne();
+
+    // Delete all assigned exercises linked to this exerciseId
+    await AssignedExercise.deleteMany({ exerciseId });
 
     res.status(200).json({
       success: true,
-      message: "Successfully Deleted the Exercise",
+      message:
+        "Successfully deleted the exercise and related assigned exercises.",
     });
   } catch (error) {
     console.log("Error in exercise controller: deleteExercise: " + error);

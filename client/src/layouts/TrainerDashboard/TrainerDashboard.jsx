@@ -3,7 +3,7 @@ import Users from "./components/Users";
 
 const TrainerDashboard = () => {
   return (
-    <div className="min-h-screen h-max w-full flex flex-col bg-black pt-20">
+    <div className="min-h-screen h-max w-full flex flex-col bg-black py-20">
       <Users />
       <AddUser />
     </div>

@@ -6,8 +6,6 @@ export const useTrainerHook = create((set) => ({
   loadingUnassignedUsers: false,
   loadingAssignedUsers: false,
   loadAddUser: false,
-  loadingUserDetails: false,
-  userDetails: {},
   unassignedUsers: [],
   assignedUsers: [],
 
@@ -52,21 +50,6 @@ export const useTrainerHook = create((set) => ({
       console.log(error);
     } finally {
       set({ loadingAssignedUsers: false });
-    }
-  },
-
-  getUserDetails: async (userId) => {
-    try {
-      set({ loadingUserDetails: true });
-      const res = await axiosInstance.get(`/trainer/user-details/${userId}`);
-
-      if (res.data.success) {
-        set({ userDetails: res.data.user });
-      }
-    } catch (error) {
-      toast.error(error.response.data.message || "Something Went Wrong");
-    } finally {
-      set({ loadingUserDetails: false });
     }
   },
 }));

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import genderData from "./genderData";
-import { useTrainerHook } from "../../hook/TrainerHook";
+import { useTrainerHook } from "../../hook/useTrainerHook";
 import { useNavigate } from "react-router-dom";
 
 const AddNewUserLayout = () => {

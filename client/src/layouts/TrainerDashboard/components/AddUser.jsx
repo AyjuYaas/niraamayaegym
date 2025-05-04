@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaPlusCircle } from "react-icons/fa";
+import { HiUserAdd } from "react-icons/hi";
 
 const AddUser = () => {
   return (
@@ -8,7 +8,7 @@ const AddUser = () => {
         to="/trainer/add-user"
         className="bg-second py-2 px-5 rounded-lg font-bold cursor-pointer hover:bg-second-hi duration-150 flex justify-center items-center gap-2"
       >
-        <FaPlusCircle />
+        <HiUserAdd size={20} />
         Add User
       </Link>
     </div>

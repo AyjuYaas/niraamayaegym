@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuthHook } from "../../../hook/AuthHook";
+import { useAuthHook } from "../../../hook/useAuthHook";
 
 const UserLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });

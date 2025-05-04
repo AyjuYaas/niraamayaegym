@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useAuthHook } from "../../../hook/AuthHook";
+import { useAuthHook } from "../../../hook/useAuthHook";
 import defaultUserProfilePic from "../images/default-user.jpg";
 import defaultTrainerProfilePic from "../images/default-trainer.jpg";
 

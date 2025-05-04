@@ -13,11 +13,12 @@ import NotFound from "./components/NotFound";
 import UserLogin from "./layouts/Auth/UserAuthLayout/UserLogin";
 // import UserSignup from "./layouts/Auth/UserAuthLayout/UserSignup";
 import UserDashboard from "./layouts/UserDashboard";
-import { useAuthHook } from "./hook/AuthHook";
+import { useAuthHook } from "./hook/useAuthHook";
 import { useEffect } from "react";
 import TrainerDashboard from "./layouts/TrainerDashboard";
 import AddNewUserLayout from "./layouts/AddNewUserLayout";
 import AddUserTask from "./layouts/AddUserTask";
+import AssignExercise from "./layouts/AssignExercise";
 
 const App = () => {
   const { loadingLogStatus, checkLogStatus, authUser, authType } =
@@ -66,6 +67,7 @@ const App = () => {
           }
         />
 
+        {/* Trainer Routes */}
         <Route
           path="/trainer/login"
           element={
@@ -103,6 +105,16 @@ const App = () => {
           element={
             authUser && authType === "trainer" ? (
               <AddUserTask />
+            ) : (
+              <Navigate to={"/trainer/login"} />
+            )
+          }
+        />
+        <Route
+          path="/trainer/assign-exercise/:taskId"
+          element={
+            authUser && authType === "trainer" ? (
+              <AssignExercise />
             ) : (
               <Navigate to={"/trainer/login"} />
             )

@@ -11,8 +11,8 @@ const AboutLayout = () => {
             </h1>
             <p className="text-2xl text-justify">
               Since 2012,{" "}
-              <span className="font-medium text-second">Nirmaya</span> has been
-              at the forefront of fitness innovation, helping individuals
+              <span className="font-medium text-second">Niraamayae</span> has
+              been at the forefront of fitness innovation, helping individuals
               achieve their health and wellness goals. What started as a small
               gym with a big vision has now grown into a thriving community of
               fitness enthusiasts, trainers, and wellness experts.
