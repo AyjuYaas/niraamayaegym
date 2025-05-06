@@ -5,7 +5,6 @@ import "./App.css";
 import { Toaster } from "react-hot-toast";
 import HomepageLayout from "./layouts/HomepageLayout";
 import AboutLayout from "./layouts/AboutLayout";
-import ContactLayout from "./layouts/ContactLayout";
 
 import TrainerLogin from "./layouts/Auth/TrainerAuthLayout/TrainerLogin";
 // import TrainerSignup from "./layouts/Auth/TrainerAuthLayout/TrainerSignup";
