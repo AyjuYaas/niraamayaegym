@@ -8,7 +8,7 @@ const AssignedExercises = ({ userName }) => {
   const [updateExerciseData, setUpdateExerciseData] = useState(null);
 
   return (
-    <div className="bg-white text-black p-2 rounded-md shadow-md shadow-gray-200 flex flex-col">
+    <div className="bg-white text-black p-2 rounded-md shadow-md shadow-gray-200 flex flex-col h-full">
       <div className="my-2">
         <h1 className="text-center font-bold text-xl">Assigned Exercises</h1>
         <p className="text-center text-gray-600">

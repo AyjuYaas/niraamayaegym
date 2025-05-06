@@ -45,10 +45,6 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    BMI: {
-      type: Number,
-      default: 0,
-    },
     defaultId: {
       type: Boolean,
       default: true,
@@ -80,6 +76,15 @@ userSchema.virtual("age").get(function () {
   }
 
   return age;
+});
+
+userSchema.virtual("BMI").get(function () {
+  if (!this.height || !this.weight) return null;
+
+  const heightInMeters = this.height / 100; // assuming height is in cm
+  const bmi = this.weight / (heightInMeters * heightInMeters);
+
+  return bmi.toFixed(1); // returns BMI as a string with one decimal
 });
 
 const User = mongoose.model("User", userSchema);

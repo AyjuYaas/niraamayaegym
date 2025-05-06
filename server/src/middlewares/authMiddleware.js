@@ -33,6 +33,9 @@ export const isAuthenticated = async (req, res, next) => {
         height: activeUser.height,
         weight: activeUser.weight,
         BMI: activeUser.BMI,
+        age: activeUser.age,
+        gender: activeUser.gender,
+        defaultId: activeUser.defaultId,
       };
     } else {
       activeUser = await Trainer.findById(decodedToken.id);
@@ -126,6 +129,7 @@ export const isUser = async (req, res, next) => {
     const activeUser = await User.findById(decodedToken.id);
     req.credentials = {
       _id: activeUser._id,
+      defaultId: activeUser.defaultId,
     };
 
     req.authType = decodedToken.authType;

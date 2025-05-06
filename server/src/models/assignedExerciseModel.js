@@ -24,6 +24,10 @@ const assignedExerciseSchema = mongoose.Schema({
     enum: ["pending", "completed"],
     default: "pending",
   },
+  lastStatusUpdate: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const AssignedExercise = mongoose.model(

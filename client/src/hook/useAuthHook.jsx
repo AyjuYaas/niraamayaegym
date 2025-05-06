@@ -8,6 +8,15 @@ export const useAuthHook = create((set) => ({
   loadingLogStatus: true,
   loading: false,
 
+  setAuthUser: (newUserData) => {
+    set((state) => ({
+      authUser: {
+        ...state.authUser,
+        ...newUserData,
+      },
+    }));
+  },
+
   checkLogStatus: async () => {
     try {
       const res = await axiosInstance.get("/auth/logStatus");
@@ -33,6 +42,18 @@ export const useAuthHook = create((set) => ({
       toast.error(error.response.data.message || "Something Went Wrong");
     } finally {
       set({ loading: false });
+    }
+  },
+
+  changeDefaultPassword: async (data) => {
+    try {
+      const res = await axiosInstance.put("user/new-password", data);
+      if (res.data.success) {
+        toast.success("Successfully Updated the Password");
+        set((state) => ({ authUser: { ...state.authUser, defaultId: false } }));
+      }
+    } catch (error) {
+      toast.error(error.response.data.message || "Something Went Wrong");
     }
   },
 

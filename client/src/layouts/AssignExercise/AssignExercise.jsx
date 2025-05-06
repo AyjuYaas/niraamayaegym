@@ -30,8 +30,8 @@ const AssignExercise = () => {
             Assign Exercises for <span className="capitalize">{task.day}</span>{" "}
             [{task.title}]
           </h1>
-          <div className="flex flex-col p-4 px-10 gap-5">
-            <div className="flex-1/2">
+          <div className="flex flex-col lg:flex-row p-4 px-10 gap-5">
+            <div className="flex-1/2 h-full">
               <AssignedExercises userName={user.name} />
             </div>
             <div className="flex-1/2">

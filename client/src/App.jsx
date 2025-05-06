@@ -19,6 +19,8 @@ import TrainerDashboard from "./layouts/TrainerDashboard";
 import AddNewUserLayout from "./layouts/AddNewUserLayout";
 import AddUserTask from "./layouts/AddUserTask";
 import AssignExercise from "./layouts/AssignExercise";
+import UpdateUserProfile from "./layouts/UpdateUserProfile";
+import SearchAllExercises from "./layouts/SearchAllExercises";
 
 const App = () => {
   const { loadingLogStatus, checkLogStatus, authUser, authType } =
@@ -44,6 +46,7 @@ const App = () => {
         <Route path="/about" element={<AboutLayout />} />
         <Route path="/contact" element={<ContactLayout />} />
 
+        {/* User Routes */}
         <Route
           path="/user/login"
           element={
@@ -61,6 +64,26 @@ const App = () => {
           element={
             authUser && authType === "user" ? (
               <UserDashboard />
+            ) : (
+              <Navigate to={"/user/login"} />
+            )
+          }
+        />
+        <Route
+          path="/user/update-profile"
+          element={
+            authUser && authType === "user" ? (
+              <UpdateUserProfile />
+            ) : (
+              <Navigate to={"/user/login"} />
+            )
+          }
+        />
+        <Route
+          path="/user/search-exercises"
+          element={
+            authUser && authType === "user" ? (
+              <SearchAllExercises />
             ) : (
               <Navigate to={"/user/login"} />
             )

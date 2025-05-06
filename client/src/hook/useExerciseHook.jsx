@@ -10,10 +10,15 @@ export const useExerciseHook = create((set) => ({
   loadingAssignedExercise: false,
 
   // Exercises
-  getExercise: async () => {
+  getExercise: async (role = "trainer") => {
     try {
-      const response = await axiosInstance.get("trainer/exercise/get-all");
-      set({ exercises: response.data.exercises });
+      if (role === "trainer") {
+        const response = await axiosInstance.get("/exercise/get-all");
+        set({ exercises: response.data.exercises });
+      } else {
+        const response = await axiosInstance.get("/user/all-exercises");
+        set({ exercises: response.data.exercises });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -24,7 +29,9 @@ export const useExerciseHook = create((set) => ({
       const response = await axiosInstance.post("trainer/exercise/add", data);
 
       if (response.data.success) {
-        set((state) => ({ exercises: [...state.exercises, data] }));
+        set((state) => ({
+          exercises: [...state.exercises, response.data.exercise],
+        }));
         toast.success("Successfully Added Exercise");
         return true;
       }
@@ -99,6 +106,7 @@ export const useExerciseHook = create((set) => ({
 
   assignExercise: async (data) => {
     try {
+      console.log(data);
       const res = await axiosInstance.post(
         "trainer/assigned-exercise/assign",
         data

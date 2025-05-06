@@ -2,17 +2,34 @@ import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
 import Task from "../models/taskModel.js";
 import AssignedExercise from "../models/assignedExerciseModel.js";
+import Exercise from "../models/exerciseModel.js";
 
 export async function newPassword(req, res) {
   try {
     if (req.credentials.defaultId) {
       const { password, confirmPassword } = req.body;
+
       if (!password || !confirmPassword) {
         return res.status(400).json({
           success: false,
-          message: "Password must match",
+          message: "Both password fields are required",
         });
       }
+
+      if (password.length < 7) {
+        return res.status(400).json({
+          success: false,
+          message: "Password must be at least 7 characters long",
+        });
+      }
+
+      if (password !== confirmPassword) {
+        return res.status(400).json({
+          success: false,
+          message: "Passwords do not match",
+        });
+      }
+
       const hashedPassword = await bcrypt.hash(password, 12);
       await User.findByIdAndUpdate(req.credentials._id, {
         password: hashedPassword,
@@ -31,6 +48,25 @@ export async function newPassword(req, res) {
     }
   } catch (error) {
     console.log("Error in User Controller: newPassword: " + error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+}
+
+export async function updateDetails(req, res) {
+  try {
+    const user = await User.findById(req.credentials._id).select(
+      "_id profilePic name email phone gender dob"
+    );
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log("Error in User Controller: updateProfile: " + error);
     res.status(500).json({
       success: false,
       message: "Server Error",
@@ -88,6 +124,9 @@ export async function updateProfile(req, res) {
         height: updatedUser.height,
         weight: updatedUser.weight,
         BMI: updatedUser.BMI,
+        age: updatedUser.age,
+        gender: updatedUser.gender,
+        defaultId: updatedUser.defaultId,
       },
     });
   } catch (error) {
@@ -110,11 +149,9 @@ export async function calculateBMI(req, res) {
       });
     }
 
-    const BMI = (weight / (height * height)).toFixed(2);
-
     const updatedUser = await User.findByIdAndUpdate(
       req.credentials._id,
-      { height, weight, BMI },
+      { height, weight },
       { new: true }
     );
 
@@ -152,36 +189,78 @@ export async function getTasks(req, res) {
   }
 }
 
-export async function getAssignedExercise(req, res) {
+export async function getAllExercise(req, res) {
   try {
-    const { taskId } = req.params;
-
-    if (!taskId) {
-      return res.status(400).json({
-        success: false,
-        message: "TaskId Not Provided",
-      });
-    }
-
-    const task = await Task.findById(taskId);
-
-    if (!task.userId.equals(req.credentials._id)) {
-      return res.status(401).json({
-        success: false,
-        message: "Not Authorized",
-      });
-    }
-
-    const assignedExercises = await AssignedExercise.find({ taskId })
-      .populate("taskId", "day title")
-      .populate("exerciseId", "name bodyPart description videos");
+    const exercises = await Exercise.find();
 
     res.status(200).json({
       success: true,
-      assignedExercises,
+      exercises,
     });
   } catch (error) {
-    console.log("Error in User Controller: getExercise: " + error);
+    console.log("Error in exercise controller: getExercise: " + error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+}
+
+export async function getAssignedExercise(req, res) {
+  try {
+    const todayName = new Date()
+      .toLocaleString("en-US", { weekday: "long" })
+      .toLowerCase();
+
+    const task = await Task.findOne({
+      userId: req.credentials._id,
+      day: todayName,
+    }).select("_id day title assignedBy");
+
+    if (!task) {
+      return res.status(404).json({
+        success: false,
+        message: "No Task Assigned for Today",
+      });
+    }
+
+    let assignedExercises = await AssignedExercise.find({
+      taskId: task._id,
+    }).populate("exerciseId", "name bodyPart description videos");
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Strip time
+
+    // Reset outdated "completed" statuses to "pending"
+    const resetPromises = assignedExercises.map(async (exercise) => {
+      const lastUpdate = new Date(exercise.lastStatusUpdate);
+      lastUpdate.setHours(0, 0, 0, 0); // Strip time
+
+      if (exercise.status === "completed" && lastUpdate < today) {
+        exercise.status = "pending";
+        exercise.lastStatusUpdate = new Date();
+        await exercise.save();
+      }
+
+      return exercise;
+    });
+
+    const updatedExercises = await Promise.all(resetPromises);
+
+    // Split into pending and completed
+    const pending = updatedExercises.filter((ex) => ex.status === "pending");
+    const completed = updatedExercises.filter(
+      (ex) => ex.status === "completed"
+    );
+
+    res.status(200).json({
+      success: true,
+      task,
+      pending,
+      completed,
+    });
+  } catch (error) {
+    console.log("Error in User Controller: getAssignedExercise: " + error);
     res.status(500).json({
       success: false,
       message: "Server Error",
@@ -196,11 +275,9 @@ export async function updateAssignedStatus(req, res) {
 
     const assignedExercise = await AssignedExercise.findByIdAndUpdate(
       assignedExerciseId,
-      { status },
+      { status, lastStatusUpdate: new Date() },
       { new: true }
-    )
-      .populate("taskId", "day title")
-      .populate("exerciseId", "name bodyPart description videos");
+    ).populate("exerciseId", "name bodyPart description videos");
 
     res.status(200).json({
       success: true,

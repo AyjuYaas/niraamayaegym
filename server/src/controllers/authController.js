@@ -46,6 +46,8 @@ export async function userLogin(req, res) {
         height: user.height,
         weight: user.weight,
         BMI: user.BMI,
+        age: user.age,
+        gender: user.gender,
         defaultId: user.defaultId,
       },
       authType: "user",
