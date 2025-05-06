@@ -7,6 +7,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    imagePublicId: {
+      type: String,
+      default: "",
+    },
     name: {
       type: String,
       required: true,

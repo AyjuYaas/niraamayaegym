@@ -3,6 +3,7 @@ import User from "../models/userModel.js";
 import Task from "../models/taskModel.js";
 import AssignedExercise from "../models/assignedExerciseModel.js";
 import Exercise from "../models/exerciseModel.js";
+import cloudinary from "../config/cloudinaryConnect.js";
 
 export async function newPassword(req, res) {
   try {
@@ -82,8 +83,47 @@ export async function updateProfile(req, res) {
 
     const user = await User.findById(req.credentials._id);
 
+    // ============== Upload image to cloudinary ==============
     if (profilePic) {
-      updatedData.profilePic = profilePic;
+      // base64 format
+      if (profilePic.startsWith("data:image")) {
+        try {
+          // Incase it is their first upload
+          if (!user.imagePublicId) {
+            const uploadResponse = await cloudinary.uploader.upload(
+              profilePic,
+              {
+                folder: "Niraamayae/",
+                crop: "auto",
+                width: 500,
+                height: 500,
+                gravity: "auto",
+              }
+            );
+            updatedData.profilePic = uploadResponse.secure_url;
+            updatedData.imagePublicId = uploadResponse.public_id;
+          } else {
+            // incase they are changing their image, replace the one on cloudinary
+            const uploadResponse = await cloudinary.uploader.upload(
+              profilePic,
+              {
+                public_id: user.imagePublicId,
+                crop: "auto",
+                width: 500,
+                height: 500,
+                gravity: "auto",
+              }
+            );
+            updatedData.profilePic = uploadResponse.secure_url;
+          }
+        } catch (err) {
+          console.log(err);
+          return res.status(400).json({
+            success: false,
+            message: "Error uploading image. Profile cannot be updated!",
+          });
+        }
+      }
     }
 
     if (!(await user.comparePassword(oldPassword))) {

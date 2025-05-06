@@ -1,8 +1,9 @@
+import cloudinary from "../config/cloudinaryConnect.js";
 import User from "../models/userModel.js";
 
 export async function addUser(req, res) {
   try {
-    const { name, email, phone, gender, dob } = req.body;
+    const { profilePic, name, email, phone, gender, dob } = req.body;
 
     if (!name || !email || !phone || !gender || !dob) {
       return res.status(400).json({
@@ -11,9 +12,38 @@ export async function addUser(req, res) {
       });
     }
 
+    let image = "";
+    let imagePublicId = "";
+
+    // ============== Upload image to cloudinary ==============
+    if (profilePic) {
+      // base64 format
+      if (profilePic.startsWith("data:image")) {
+        try {
+          const uploadResponse = await cloudinary.uploader.upload(profilePic, {
+            folder: "Niraamayae/",
+            crop: "auto",
+            width: 500,
+            height: 500,
+            gravity: "auto",
+          });
+          image = uploadResponse.secure_url;
+          imagePublicId = uploadResponse.public_id;
+        } catch (err) {
+          console.log(err);
+          return res.status(400).json({
+            success: false,
+            message: "Error uploading image!",
+          });
+        }
+      }
+    }
+
     const password = "1234567";
 
     await User.create({
+      profilePic: image,
+      imagePublicId,
       name,
       email,
       password,
