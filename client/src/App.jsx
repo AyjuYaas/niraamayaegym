@@ -44,7 +44,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomepageLayout />} />
         <Route path="/about" element={<AboutLayout />} />
-        <Route path="/contact" element={<ContactLayout />} />
 
         {/* User Routes */}
         <Route
