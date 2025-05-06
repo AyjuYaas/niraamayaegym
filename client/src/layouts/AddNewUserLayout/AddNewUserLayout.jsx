@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import genderData from "./genderData";
 import { useTrainerHook } from "../../hook/useTrainerHook";
 import { useNavigate } from "react-router-dom";
+import { FaCamera } from "react-icons/fa";
 
 const AddNewUserLayout = () => {
   const navigate = useNavigate();
   const { loadAddUser, addUser } = useTrainerHook();
+  const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
+    profilePic: "/default-user.jpg",
     name: "",
     email: "",
     phone: "",
@@ -17,6 +20,23 @@ const AddNewUserLayout = () => {
 
   const handleFormDataChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result;
+      if (typeof result === "string") {
+        setFormData((prev) => ({
+          ...prev,
+          profilePic: result,
+        }));
+      }
+    };
+    reader.readAsDataURL(file); // Converts to base64
   };
 
   const handleSubmit = async (e) => {
@@ -29,14 +49,44 @@ const AddNewUserLayout = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen justify-center items-center bg-gray-200 text-black">
-      <div className="flex shadow-2xl h-max pt-12">
+    <div className="flex flex-col min-h-screen pt-20 justify-center items-center bg-gray-200 text-black">
+      <div className="flex shadow-2xl">
         <div className="bg-white p-10 h-full flex items-center w-auto md:w-100">
           {/* Form */}
           <form
             className="flex flex-col gap-5 text-lg w-full"
             onSubmit={handleSubmit}
           >
+            {/* ========== Image Update =========== */}
+            <div className="flex mx-auto relative w-max p-0">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                name="profilePic"
+              />
+
+              {formData.profilePic && (
+                <div>
+                  <img
+                    src={formData.profilePic}
+                    alt={formData.name + "-img"}
+                    className="size-30 rounded-full border-2 bg-white object-cover"
+                    style={{ imageRendering: "-webkit-optimize-contrast" }}
+                  />
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className={`absolute bottom-0 right-0 text-center size-10 flex items-center justify-center bg-gray-800 text-[white] hover:bg-[#565b70] duration-100 rounded-full p-1 min-w-max border-0 font-medium cursor-pointer`}
+              >
+                <FaCamera />
+              </button>
+            </div>
+
             {/* Name */}
             <div className="flex flex-col">
               <label htmlFor="name" className="font-semibold ml-1">
@@ -142,11 +192,11 @@ const AddNewUserLayout = () => {
           </form>
         </div>
 
-        <div className=" text-second h-full p-2 sm:p-10 flex flex-col items-start justify-start w-auto relative">
+        <div className=" text-second min-h-full bg-red-300 p-2 sm:p-10 flex flex-col items-start justify-start w-auto relative">
           <img
             src="/auth/signup.jpg"
             alt="auth-background"
-            className="object-cover object-top absolute w-full h-full top-0 left-0 select-none z-1"
+            className="object-cover absolute w-full h-full top-0 left-0 select-none z-1"
           />
           <div className="absolute inset-0 bg-black/80 z-2"></div>
 

@@ -8,7 +8,7 @@ const SingleUser = ({ user }) => {
       to={`/trainer/assign-user/${user._id}`}
     >
       <img
-        src={user.image || defaultUserImage}
+        src={user.profilePic || defaultUserImage}
         alt={user.name}
         className="size-30 rounded-full mb-2 absolute -top-10"
       />

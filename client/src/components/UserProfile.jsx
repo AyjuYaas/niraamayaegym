@@ -13,11 +13,11 @@ const UserProfile = ({ user }) => {
         <div className="text-gray-400 text-sm">
           <p>
             <span className="font-bold">Height:</span>{" "}
-            {user.height === 0 ? "N/A" : user.height} cm
+            {user.height === 0 ? "N/A" : `${user.height} cm`}
           </p>
           <p>
             <span className="font-bold">Weight: </span>
-            {user.weight === 0 ? "N/A" : user.weight} kg
+            {user.weight === 0 ? "N/A" : `${user.height} kg`}
           </p>
           <p>
             <span className="font-bold">Age: </span>

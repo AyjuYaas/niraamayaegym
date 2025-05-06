@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import genderData from "./genderData";
 import { useUserHook } from "../../hook/useUserHook";
+import { FaCamera } from "react-icons/fa";
 
 const UpdateUserProfile = () => {
   const { getUpdateDetails, updateProfile, loadUpdate } = useUserHook();
+  const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
+    profilePic: "",
     name: "",
     email: "",
     oldPassword: "",
@@ -22,6 +25,7 @@ const UpdateUserProfile = () => {
       const formattedDate = new Date(user.dob).toISOString().split("T")[0]; // "2003-10-30"
 
       setFormData({
+        profilePic: user.profilePic || "/default-user.jpg",
         name: user.name,
         email: user.email,
         oldPassword: "",
@@ -39,6 +43,23 @@ const UpdateUserProfile = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result;
+      if (typeof result === "string") {
+        setFormData((prev) => ({
+          ...prev,
+          profilePic: result,
+        }));
+      }
+    };
+    reader.readAsDataURL(file); // Converts to base64
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await updateProfile(formData);
@@ -47,14 +68,49 @@ const UpdateUserProfile = () => {
   return (
     <div className="min-h-screen h-max w-full flex flex-col items-center justify-center bg-gray-200 py-20 relative ">
       <div className="bg-white w-120 rounded-md self-center p-10 h-full flex flex-col items-center min-w-100 text-gray-900 shadow-xl">
-        <h1 className="text-2xl font-bold text-second mb-5">
-          Update Your Profile
-        </h1>
+        <div className="flex flex-col items-center mb-5">
+          <h1 className="text-2xl font-bold text-second">
+            Update Your Profile
+          </h1>
+          <p className="text-xs text-gray-500">
+            Note: For profile picture to update everywhere, please reload the
+            page
+          </p>
+        </div>
         {/* Form */}
         <form
           className="flex flex-col gap-5 text-lg w-full"
           onSubmit={handleSubmit}
         >
+          {/* ========== Image Update =========== */}
+          <div className="flex mx-auto relative w-max p-0">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+              name="profilePic"
+            />
+
+            {formData.profilePic && (
+              <div>
+                <img
+                  src={formData.profilePic}
+                  alt={formData.name + "-img"}
+                  className="size-30 rounded-full border-2 bg-white object-cover"
+                  style={{ imageRendering: "-webkit-optimize-contrast" }}
+                />
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className={`absolute bottom-0 right-0 text-center size-10 flex items-center justify-center bg-gray-800 text-[white] hover:bg-[#565b70] duration-100 rounded-full p-1 min-w-max border-0 font-medium cursor-pointer`}
+            >
+              <FaCamera />
+            </button>
+          </div>
           {/* Name */}
           <div className="flex flex-col">
             <label htmlFor="name" className="font-semibold ml-1">

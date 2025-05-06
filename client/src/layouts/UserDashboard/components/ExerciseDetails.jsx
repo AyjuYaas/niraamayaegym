@@ -48,7 +48,7 @@ const ExerciseDetails = ({ exercise, close }) => {
         </div>
 
         <div
-          className="absolute top-2 right-2 cursor-pointer bg-red-700 hover:bg-red-500"
+          className="absolute top-2 right-2 cursor-pointer bg-red-700 hover:bg-red-500 rounded-full p-1"
           onClick={(e) => {
             e.stopPropagation();
             close();
