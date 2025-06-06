@@ -12,6 +12,22 @@ export async function addUser(req, res) {
       });
     }
 
+    // Validate that the user is older than 13
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--; // Adjust if birthday hasn't occurred yet this year
+    }
+
+    if (age <= 13) {
+      return res.status(400).json({
+        success: false,
+        message: "User must be older than 13 years.",
+      });
+    }
+
     let image = "";
     let imagePublicId = "";
 
@@ -108,7 +124,7 @@ export async function getAssignedUsers(req, res) {
   try {
     const users = await User.find({ isAssigned: true })
       .sort({ createdAt: -1 })
-      .select("_id profilePic name gender");
+      .select("_id profilePic name gender email");
 
     res.status(200).json({
       success: true,
@@ -127,7 +143,7 @@ export async function getUnassignedUsers(req, res) {
   try {
     const users = await User.find({ isAssigned: false })
       .sort({ createdAt: -1 })
-      .select("_id profilePic name gender");
+      .select("_id profilePic name gender email");
 
     res.status(200).json({
       success: true,

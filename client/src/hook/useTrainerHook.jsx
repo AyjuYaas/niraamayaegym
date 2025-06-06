@@ -11,7 +11,7 @@ export const useTrainerHook = create((set) => ({
 
   addUser: async (userData) => {
     try {
-      set({ loadAddUsers: true });
+      set({ loadAddUser: true });
       const res = await axiosInstance.post("/trainer/add-user", userData);
       if (res.data.success) {
         toast.success(res.data.message);
@@ -20,7 +20,7 @@ export const useTrainerHook = create((set) => ({
     } catch (error) {
       toast.error(error.response.data.message || "Something Went Wrong");
     } finally {
-      set({ loadAddUsers: false });
+      set({ loadAddUser: false });
     }
     return false;
   },

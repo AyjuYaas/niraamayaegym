@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useExerciseHook } from "../../../hook/useExerciseHook";
 import { PiEmpty } from "react-icons/pi";
 import AssignUpdateExerciseForm from "./AssignUpdateExerciseForm";
+import { TiTick } from "react-icons/ti";
 
 const AssignedExercises = ({ userName }) => {
   const { assignedExercises } = useExerciseHook();
@@ -25,10 +26,13 @@ const AssignedExercises = ({ userName }) => {
           assignedExercises.map((exercise, index) => (
             <div
               key={index}
-              className="relative bg-gray-900 hover:bg-gray-700 text-white p-5 w-45 h-20 flex items-center justify-center text-lg cursor-pointer rounded-md duration-100"
+              className="relative bg-gray-900 hover:bg-gray-700 text-white p-5 w-45 h-20 flex items-center justify-center text-lg cursor-pointer rounded-md duration-100 gap-2"
               onClick={() => setUpdateExerciseData(exercise)}
             >
               <h1 className="text-center">{exercise.exerciseId.name}</h1>
+              {exercise.status === "completed" && (
+                <TiTick className="text-green-600 size-6 bg-white rounded-full" />
+              )}
             </div>
           ))
         )}

@@ -20,6 +20,22 @@ const Footer = () => {
           <br />
           Providing Quality Service since 2012
         </p>
+        <span className="footer-title mt-2 -mb-1">Contact Us</span>
+        <div className="flex flex-col text-base">
+          <a href="tel:01-4373022" className="hover:underline">
+            01-4373022
+          </a>
+          <a href="mailto:niraamayae@gmail.com" className="hover:underline">
+            niraamayae@gmail.com
+          </a>
+          <a
+            href="https://maps.app.goo.gl/Qi2APeJGAUHhoCuZA"
+            target="_blank"
+            className="hover:underline"
+          >
+            Narayan Gopal Chowk, Maharajgunj, Kathmandu, Nepal
+          </a>
+        </div>
       </aside>
       <nav>
         <h6 className="footer-title">Social</h6>

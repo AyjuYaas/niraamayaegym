@@ -17,10 +17,13 @@ export async function newPassword(req, res) {
         });
       }
 
-      if (password.length < 7) {
+      const passwordRegex =
+        /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~]).{8,}$/;
+      if (!passwordRegex.test(password)) {
         return res.status(400).json({
           success: false,
-          message: "Password must be at least 7 characters long",
+          message:
+            "Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character",
         });
       }
 
@@ -28,6 +31,17 @@ export async function newPassword(req, res) {
         return res.status(400).json({
           success: false,
           message: "Passwords do not match",
+        });
+      }
+
+      const user = await User.findById(req.credentials._id);
+
+      // Check if new password is same as the existing password
+      const isSamePassword = await bcrypt.compare(password, user.password);
+      if (isSamePassword) {
+        return res.status(400).json({
+          success: false,
+          message: "New password must be different from the current password",
         });
       }
 
@@ -56,7 +70,7 @@ export async function newPassword(req, res) {
   }
 }
 
-export async function updateDetails(req, res) {
+export async function getUpdateDetails(req, res) {
   try {
     const user = await User.findById(req.credentials._id).select(
       "_id profilePic name email phone gender dob"
@@ -82,6 +96,13 @@ export async function updateProfile(req, res) {
     const updatedData = otherData;
 
     const user = await User.findById(req.credentials._id);
+
+    if (!(await user.comparePassword(oldPassword))) {
+      return res.status(400).json({
+        success: false,
+        message: "Your password is incorrect",
+      });
+    }
 
     // ============== Upload image to cloudinary ==============
     if (profilePic) {
@@ -126,18 +147,19 @@ export async function updateProfile(req, res) {
       }
     }
 
-    if (!(await user.comparePassword(oldPassword))) {
-      return res.status(400).json({
-        success: false,
-        message: "Your password is incorrect",
-      });
-    }
-
     if (newPassword) {
       if (newPassword <= 6) {
         return res.status(400).json({
           success: false,
           message: "Password must be 7 characters or more",
+        });
+      }
+
+      const isSamePassword = await bcrypt.compare(newPassword, user.password);
+      if (isSamePassword) {
+        return res.status(400).json({
+          success: false,
+          message: "New password must be different from the current password",
         });
       }
 
@@ -171,10 +193,17 @@ export async function updateProfile(req, res) {
     });
   } catch (error) {
     console.log("Error in User Controller: updateProfile: " + error);
-    res.status(500).json({
-      success: false,
-      message: "Server Error",
-    });
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email already exists. Please use a different email address.",
+      });
+    } else {
+      return res.status(500).json({
+        success: false,
+        message: "Server Error",
+      });
+    }
   }
 }
 

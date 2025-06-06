@@ -5,9 +5,9 @@ import {
   getAllExercise,
   getAssignedExercise,
   getTasks,
+  getUpdateDetails,
   newPassword,
   updateAssignedStatus,
-  updateDetails,
   updateProfile,
 } from "../controllers/userController.js";
 
@@ -16,7 +16,7 @@ const router = Router();
 router.use(isUser);
 
 router.put("/new-password", newPassword);
-router.get("/get-update-details", updateDetails);
+router.get("/get-update-details", getUpdateDetails);
 router.put("/update-profile", updateProfile);
 
 router.put("/calculate-bmi", calculateBMI);

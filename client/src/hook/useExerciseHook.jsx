@@ -12,8 +12,9 @@ export const useExerciseHook = create((set) => ({
   // Exercises
   getExercise: async (role = "trainer") => {
     try {
+      console.log(role);
       if (role === "trainer") {
-        const response = await axiosInstance.get("/exercise/get-all");
+        const response = await axiosInstance.get("/trainer/exercise/get-all");
         set({ exercises: response.data.exercises });
       } else {
         const response = await axiosInstance.get("/user/all-exercises");

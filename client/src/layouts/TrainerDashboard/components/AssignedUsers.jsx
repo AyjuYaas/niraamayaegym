@@ -10,14 +10,16 @@ const AssignedUsers = ({ searchQuery }) => {
     getAssignedUsers();
   }, [getAssignedUsers]);
 
-  const filteredUsers = assignedUsers.filter((user) =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUsers = assignedUsers.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.includes(searchQuery)
   );
 
   return (
     <div className="flex flex-col gap-5 w-full px-4 mt-5">
       <div className="flex justify-between gap-5 self-center lg:self-start">
-        <h1 className="text-2xl font-bold tracking-wide">Assigned Users</h1>
+        <h1 className="text-2xl font-bold tracking-wide">Existing Users</h1>
       </div>
 
       {loadingAssignedUsers ? (

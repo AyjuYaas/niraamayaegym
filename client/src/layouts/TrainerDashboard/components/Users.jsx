@@ -13,7 +13,7 @@ const Users = () => {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search Users..."
+          placeholder="Search Users Using Their Name or Email..."
           className="input w-full pl-10 border-0"
         />
       </div>

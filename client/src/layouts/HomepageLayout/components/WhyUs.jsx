@@ -11,9 +11,13 @@ const WhyUs = () => {
         stay motivated, and connect with like-minded individuals.
       </p>
 
-      <button className="px-15 py-8 md:px-20 md:py-10  relative z-2 bg-black text-white font-extrabold text-2xl md:text-3xl cursor-pointer border-5 hover:bg-second hover:-translate-y-2 transition-all duration-250 ease-in-out">
+      <a
+        className="px-15 py-8 md:px-20 md:py-10  relative z-2 bg-black text-white font-extrabold text-2xl md:text-3xl cursor-pointer border-5 hover:bg-second hover:-translate-y-2 transition-all duration-250 ease-in-out"
+        href="https://www.facebook.com/niraamayae/"
+        target="_blank"
+      >
         Join Our Community
-      </button>
+      </a>
     </div>
   );
 };

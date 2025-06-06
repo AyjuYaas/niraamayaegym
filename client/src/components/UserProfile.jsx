@@ -17,7 +17,7 @@ const UserProfile = ({ user }) => {
           </p>
           <p>
             <span className="font-bold">Weight: </span>
-            {user.weight === 0 ? "N/A" : `${user.height} kg`}
+            {user.weight === 0 ? "N/A" : `${user.weight} kg`}
           </p>
           <p>
             <span className="font-bold">Age: </span>
