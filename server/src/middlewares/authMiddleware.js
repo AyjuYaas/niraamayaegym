@@ -24,7 +24,9 @@ export const isAuthenticated = async (req, res, next) => {
 
     let activeUser;
 
+    // if decoded role is user
     if (decodedToken.authType === "user") {
+      // Find user using their id
       activeUser = await User.findById(decodedToken.id);
       req.credentials = {
         _id: activeUser._id,
@@ -35,6 +37,7 @@ export const isAuthenticated = async (req, res, next) => {
         BMI: activeUser.BMI,
         age: activeUser.age,
         gender: activeUser.gender,
+        specialCondition: activeUser.specialCondition,
         defaultId: activeUser.defaultId,
       };
     } else {

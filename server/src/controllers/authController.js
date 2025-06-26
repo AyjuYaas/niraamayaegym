@@ -12,6 +12,7 @@ const loginToken = (id, authType) => {
 export async function userLogin(req, res) {
   try {
     const { email, password } = req.body;
+
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -32,8 +33,8 @@ export async function userLogin(req, res) {
 
     res.cookie("auth", token, {
       maxAge: 14 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      sameSite: "strict",
+      httpOnly: true, // Cause we use http for development
+      sameSite: "strict", // So that it doesn't store info in another webpage
       secure: true,
     });
 

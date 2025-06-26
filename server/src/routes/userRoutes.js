@@ -13,6 +13,8 @@ import {
 
 const router = Router();
 
+router.get("/all-all-exercises", getAllExercise);
+
 router.use(isUser);
 
 router.put("/new-password", newPassword);

@@ -1,14 +1,33 @@
 import cloudinary from "../config/cloudinaryConnect.js";
 import User from "../models/userModel.js";
+import { sendPasswordEmail } from "../utils/nodeMailer.js";
 
 export async function addUser(req, res) {
   try {
-    const { profilePic, name, email, phone, gender, dob } = req.body;
+    const {
+      profilePic,
+      name,
+      email,
+      phone,
+      gender,
+      dob,
+      height,
+      weight,
+      specialCondition,
+    } = req.body;
 
-    if (!name || !email || !phone || !gender || !dob) {
+    if (!name || !email || !phone || !gender || !dob || !height || !weight) {
       return res.status(400).json({
         success: false,
         message: "All the input is required",
+      });
+    }
+
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Email format is invalid",
       });
     }
 
@@ -27,6 +46,8 @@ export async function addUser(req, res) {
         message: "User must be older than 13 years.",
       });
     }
+
+    // EMail Validation
 
     let image = "";
     let imagePublicId = "";
@@ -55,7 +76,17 @@ export async function addUser(req, res) {
       }
     }
 
-    const password = "1234567";
+    const password = Math.random().toString(36).slice(-8);
+
+    try {
+      await sendPasswordEmail(email, password);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to send password email.",
+      });
+    }
 
     await User.create({
       profilePic: image,
@@ -66,6 +97,9 @@ export async function addUser(req, res) {
       phone,
       gender,
       dob: new Date(dob),
+      height,
+      weight,
+      specialCondition,
     });
 
     return res.status(200).json({
@@ -109,6 +143,8 @@ export async function getUserDetails(req, res) {
         phone: user.phone,
         height: user.height,
         weight: user.weight,
+        BMI: user.BMI,
+        specialCondition: user.specialCondition,
       },
     });
   } catch (error) {
@@ -120,9 +156,10 @@ export async function getUserDetails(req, res) {
   }
 }
 
+// Existing Users
 export async function getAssignedUsers(req, res) {
   try {
-    const users = await User.find({ isAssigned: true })
+    const users = await User.find({ isAssigned: true }) // SELECT * USERS WHERE IS_ASSIGNE = TRUE
       .sort({ createdAt: -1 })
       .select("_id profilePic name gender email");
 
@@ -139,6 +176,7 @@ export async function getAssignedUsers(req, res) {
   }
 }
 
+// New Users
 export async function getUnassignedUsers(req, res) {
   try {
     const users = await User.find({ isAssigned: false })

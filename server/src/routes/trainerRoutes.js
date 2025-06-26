@@ -34,8 +34,8 @@ router.use(isTrainer);
 
 // User Routes
 router.post("/add-user", addUser);
-router.get("/assigned-users", getAssignedUsers);
-router.get("/unassigned-users", getUnassignedUsers);
+router.get("/assigned-users", getAssignedUsers); // For Existing Users
+router.get("/unassigned-users", getUnassignedUsers); // For new Users
 router.get("/user-details/:userId", getUserDetails);
 
 // Exercise Routes

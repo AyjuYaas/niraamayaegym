@@ -42,6 +42,7 @@ export async function assignTask(req, res) {
       title,
     });
 
+    //change to existing user
     await user.updateOne({ isAssigned: true });
 
     res.status(200).json({
@@ -82,6 +83,8 @@ export async function getTask(req, res) {
         age: user.age,
         height: user.height,
         weight: user.weight,
+        BMI: user.BMI,
+        specialCondition: user.specialCondition,
       },
       tasks,
     });
@@ -146,12 +149,14 @@ export async function updateTask(req, res) {
     }
 
     const toBeUpdatedTask = await Task.findById(taskId);
+
     if (!toBeUpdatedTask) {
       return res.status(404).json({
         success: false,
         message: "Task not found",
       });
     }
+
     const existingTask = await Task.findOne({
       userId: toBeUpdatedTask.userId,
       day,

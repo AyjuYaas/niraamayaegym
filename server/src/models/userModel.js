@@ -49,6 +49,9 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    specialCondition: {
+      type: String,
+    },
     defaultId: {
       type: Boolean,
       default: true,

@@ -64,10 +64,7 @@ export async function getAssignedExercise(req, res) {
         message: "Task is not valid",
       });
     }
-    const user = await User.findById(task.userId).select(
-      "profilePic name height weight age gender"
-    );
-
+    const user = await User.findById(task.userId);
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -82,7 +79,17 @@ export async function getAssignedExercise(req, res) {
     res.status(200).json({
       success: true,
       task,
-      user,
+      user: {
+        _id: user._id,
+        profilePic: user.profilePic,
+        name: user.name,
+        gender: user.gender,
+        age: user.age,
+        height: user.height,
+        weight: user.weight,
+        BMI: user.BMI,
+        specialCondition: user.specialCondition,
+      },
       assignedExercises,
     });
   } catch (error) {
