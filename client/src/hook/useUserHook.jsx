@@ -77,6 +77,7 @@ export const useUserHook = create((set) => ({
         ...authHook.authUser,
         height: data.height,
         weight: data.weight,
+        BMI: res.data.credentials.BMI,
       });
       return res.data.credentials.BMI;
     } catch (error) {

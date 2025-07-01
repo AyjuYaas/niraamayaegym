@@ -16,6 +16,7 @@ const UpdateUserProfile = () => {
     phone: "",
     gender: "",
     dob: "",
+    specialCondition: "",
   });
 
   useEffect(() => {
@@ -33,6 +34,7 @@ const UpdateUserProfile = () => {
         phone: user.phone,
         gender: user.gender,
         dob: formattedDate,
+        specialCondition: user.specialCondition,
       });
     };
 
@@ -218,6 +220,23 @@ const UpdateUserProfile = () => {
               onChange={handleFormDataChange}
               required
               className="bg-gray-300 p-2 rounded-lg text-base [&::-webkit-calendar-picker-indicator]:invert"
+            />
+          </div>
+
+          {/* Special Condition */}
+          <div className="flex flex-col">
+            <label htmlFor="specialCondition" className="font-semibold ml-1">
+              Special Condition
+            </label>
+            <input
+              type="text"
+              name="specialCondition"
+              id="specialCondition"
+              value={formData.specialCondition}
+              onChange={handleFormDataChange}
+              placeholder="Edit your special condition"
+              required
+              className="bg-gray-300 p-2 rounded-lg text-base"
             />
           </div>
 

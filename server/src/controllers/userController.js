@@ -73,7 +73,7 @@ export async function newPassword(req, res) {
 export async function getUpdateDetails(req, res) {
   try {
     const user = await User.findById(req.credentials._id).select(
-      "_id profilePic name email phone gender dob"
+      "_id profilePic name email phone gender dob specialCondition"
     );
 
     res.status(200).json({

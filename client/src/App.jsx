@@ -20,6 +20,8 @@ import AddUserTask from "./layouts/AddUserTask";
 import AssignExercise from "./layouts/AssignExercise";
 import UpdateUserProfile from "./layouts/UpdateUserProfile";
 import SearchAllExercises from "./layouts/SearchAllExercises";
+import BackButton from "./components/BackButton";
+import { useLocation } from "react-router-dom";
 
 const App = () => {
   const { loadingLogStatus, checkLogStatus, authUser, authType } =
@@ -28,6 +30,12 @@ const App = () => {
   useEffect(() => {
     checkLogStatus();
   }, [checkLogStatus]);
+
+  const location = useLocation();
+  const hideBackButtonRoutes = ["/", "/about"];
+  const shouldShowBackButton = !hideBackButtonRoutes.includes(
+    location.pathname
+  );
 
   if (loadingLogStatus) {
     return (
@@ -144,6 +152,12 @@ const App = () => {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      {shouldShowBackButton && (
+        <div className="fixed top-20 left-5">
+          <BackButton />
+        </div>
+      )}
     </div>
   );
 };

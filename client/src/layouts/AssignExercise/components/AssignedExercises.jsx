@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useExerciseHook } from "../../../hook/useExerciseHook";
 import { PiEmpty } from "react-icons/pi";
 import AssignUpdateExerciseForm from "./AssignUpdateExerciseForm";
-import { TiTick } from "react-icons/ti";
 
 const AssignedExercises = ({ userName }) => {
   const { assignedExercises } = useExerciseHook();
@@ -15,6 +14,9 @@ const AssignedExercises = ({ userName }) => {
         <p className="text-center text-gray-600">
           To edit any assigned exercise, click on the exercise
         </p>
+        <p className="text-sm text-gray-600 text-center">
+          Green background indicates, the user has completed the exercise
+        </p>
       </div>
       <div className="flex flex-wrap gap-5 max-h-60 overflow-y-auto justify-center p-2 mb-5">
         {assignedExercises.length === 0 ? (
@@ -26,13 +28,14 @@ const AssignedExercises = ({ userName }) => {
           assignedExercises.map((exercise, index) => (
             <div
               key={index}
-              className="relative bg-gray-900 hover:bg-gray-700 text-white p-5 w-45 h-20 flex items-center justify-center text-lg cursor-pointer rounded-md duration-100 gap-2"
+              className={`relative  text-white p-5 w-45 h-20 flex items-center justify-center text-lg cursor-pointer rounded-md duration-100 gap-2 ${
+                exercise.status === "completed"
+                  ? "bg-green-700 hover:bg-green-600"
+                  : "bg-gray-900 hover:bg-gray-700"
+              }`}
               onClick={() => setUpdateExerciseData(exercise)}
             >
               <h1 className="text-center">{exercise.exerciseId.name}</h1>
-              {exercise.status === "completed" && (
-                <TiTick className="text-green-600 size-6 bg-white rounded-full" />
-              )}
             </div>
           ))
         )}

@@ -27,6 +27,17 @@ const UserProfile = ({ user }) => {
             <span className="font-bold">Gender: </span>
             {user.gender}
           </p>
+          <p>
+            <span className="font-bold">BMI: </span>
+            {user.BMI || "N/A"}
+          </p>
+
+          {user.specialCondition && (
+            <p>
+              <span className="font-bold">Special Condition: </span>
+              {user.specialCondition || "N/A"}
+            </p>
+          )}
         </div>
       </div>
     </div>

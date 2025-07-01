@@ -27,7 +27,7 @@ const UserDashboard = () => {
             })
           }
         >
-          Calculate BMI
+          Update Height and Weight
         </button>
       </div>
 

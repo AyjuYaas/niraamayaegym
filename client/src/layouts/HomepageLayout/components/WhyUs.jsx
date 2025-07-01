@@ -6,7 +6,7 @@ const WhyUs = () => {
       </h1>
       <p className="text-2xl md:text-3xl font-light text-center leading-10 md:leading-15">
         At Niraamayae Gym Assistance, we believe fitness is more than just
-        workouts—it's a lifestyle. We are not just your assistance; we are a
+        workouts, it's a lifestyle. We are not just your assistance; we are a
         whole community dedicated to helping you achieve your fitness goals,
         stay motivated, and connect with like-minded individuals.
       </p>

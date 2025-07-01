@@ -16,6 +16,9 @@ const AddNewUserLayout = () => {
     phone: "",
     gender: "",
     dob: "",
+    height: "",
+    weight: "",
+    specialCondition: "",
   });
 
   const handleFormDataChange = (e) => {
@@ -86,7 +89,6 @@ const AddNewUserLayout = () => {
                 <FaCamera />
               </button>
             </div>
-
             {/* Name */}
             <div className="flex flex-col">
               <label htmlFor="name" className="font-semibold ml-1">
@@ -103,7 +105,6 @@ const AddNewUserLayout = () => {
                 className="bg-gray-300 p-2 rounded-lg text-base"
               />
             </div>
-
             {/* Email */}
             <div className="flex flex-col">
               <label htmlFor="email" className="font-semibold ml-1">
@@ -120,7 +121,6 @@ const AddNewUserLayout = () => {
                 className="bg-gray-300 p-2 rounded-lg text-base"
               />
             </div>
-
             {/* Phone */}
             <div className="flex flex-col">
               <label htmlFor="phone" className="font-semibold ml-1">
@@ -139,7 +139,6 @@ const AddNewUserLayout = () => {
                 className="bg-gray-300 p-2 rounded-lg text-base"
               />
             </div>
-
             {/* Gender */}
             <div className="flex flex-col">
               <label htmlFor="gender" className="font-semibold ml-1">
@@ -161,7 +160,6 @@ const AddNewUserLayout = () => {
                 ))}
               </div>
             </div>
-
             {/* DOB */}
             <div className="flex flex-col">
               <label htmlFor="dob" className="font-semibold ml-1">
@@ -177,7 +175,59 @@ const AddNewUserLayout = () => {
                 className="bg-gray-300 p-2 rounded-lg text-base [&::-webkit-calendar-picker-indicator]:invert"
               />
             </div>
+            {/* Weight in KG */}
+            <div className="flex flex-col">
+              <label htmlFor="weight" className="font-semibold ml-1">
+                Weight (Kg)
+              </label>
+              <input
+                type="number"
+                name="weight"
+                id="weight"
+                value={formData.weight}
+                onChange={handleFormDataChange}
+                placeholder="Customer's Weight in Kg"
+                required
+                min={20}
+                className="bg-gray-300 p-2 rounded-lg text-base"
+              />
+            </div>
+            {/* Height in cm */}
+            <div className="form-control">
+              <div className="flex flex-col">
+                <label htmlFor="height" className="font-semibold ml-1">
+                  Height (cm)
+                </label>
+                <input
+                  type="number"
+                  name="height"
+                  id="height"
+                  value={formData.height}
+                  onChange={handleFormDataChange}
+                  placeholder="Customer's Height in cm"
+                  min={40}
+                  required
+                  className="bg-gray-300 p-2 rounded-lg text-base"
+                />
+              </div>
+            </div>
 
+            {/* Special Condition */}
+            <div className="flex flex-col">
+              <label htmlFor="specialCondition" className="font-semibold ml-1">
+                Special Condition
+              </label>
+              <input
+                type="text"
+                name="specialCondition"
+                id="specialCondition"
+                value={formData.specialCondition}
+                onChange={handleFormDataChange}
+                placeholder="Enter special condition if any"
+                className="bg-gray-300 p-2 rounded-lg text-base [&::-webkit-calendar-picker-indicator]:invert"
+              />
+              <span className="text-sm">e.g. High blood pressure, etc</span>
+            </div>
             <div>
               <input
                 type="submit"

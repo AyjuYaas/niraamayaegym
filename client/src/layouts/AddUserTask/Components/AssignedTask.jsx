@@ -29,7 +29,6 @@ const AssignedTask = () => {
                 key={index}
                 className="bg-white text-black p-5 flex gap-3 items-center rounded-xl cursor-pointer w-100 hover:bg-gray-100"
               >
-                <img src="/Default_image.svg" className="text-white size-15" />
                 <div>
                   <h1 className="capitalize font-bold">{task.day}</h1>
                   <p>{task.title}</p>
