@@ -36,6 +36,20 @@ const UpdateUserProfile = () => {
         dob: formattedDate,
         specialCondition: user.specialCondition,
       });
+
+      return () => {
+        setFormData({
+          profilePic: "",
+          name: "",
+          email: "",
+          oldPassword: "",
+          newPassword: "",
+          phone: "",
+          gender: "",
+          dob: "",
+          specialCondition: "",
+        });
+      };
     };
 
     getDetails();

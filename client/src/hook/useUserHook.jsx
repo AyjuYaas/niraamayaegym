@@ -27,6 +27,10 @@ export const useUserHook = create((set) => ({
     }
   },
 
+  resetAssignedExercise: () => {
+    set({ pendingExercises: [], completedExercises: [] });
+  },
+
   updateAssignedExercise: async (exerciseId, data) => {
     try {
       const res = await axiosInstance.put(

@@ -1,4 +1,5 @@
 import cloudinary from "../config/cloudinaryConnect.js";
+import Task from "../models/taskModel.js";
 import User from "../models/userModel.js";
 import { sendPasswordEmail } from "../utils/nodeMailer.js";
 
@@ -77,6 +78,8 @@ export async function addUser(req, res) {
     }
 
     const password = Math.random().toString(36).slice(-8);
+
+    console.log(password);
 
     try {
       await sendPasswordEmail(email, password);
@@ -192,6 +195,46 @@ export async function getUnassignedUsers(req, res) {
     res.status(500).json({
       success: false,
       message: "Server Error",
+    });
+  }
+}
+
+export async function deleteUser(req, res) {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "No user found",
+      });
+    }
+
+    const tasks = await Task.find({ userId });
+
+    if (tasks.length > 0) {
+      const taskIds = tasks.map((task) => task._id);
+
+      // Delete AssignedExercises by taskId
+      await AssignedExercise.deleteMany({ taskId: { $in: taskIds } });
+
+      // Now, delete all the tasks
+      await Task.deleteMany({ userId });
+    }
+    await User.findByIdAndDelete(userId);
+
+    return res.status(200).json({
+      success: true,
+      message:
+        "User and associated tasks/assigned exercises deleted successfully",
+    });
+  } catch (error) {
+    console.log("Error while deleting user: ", error);
+    return res.status(500).json({
+      status: false,
+      message: "Internal Server Error",
     });
   }
 }

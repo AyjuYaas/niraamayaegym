@@ -32,6 +32,10 @@ export const useTaskHook = create((set) => ({
     }
   },
 
+  resetTask: async () => {
+    set({ tasks: [] });
+  },
+
   assignTask: async (userId, taskDetails) => {
     try {
       const response = await axiosInstance.post(

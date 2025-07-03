@@ -52,4 +52,16 @@ export const useTrainerHook = create((set) => ({
       set({ loadingAssignedUsers: false });
     }
   },
+
+  deleteUser: async (userId) => {
+    try {
+      const res = await axiosInstance.delete(`/trainer/delete-user/${userId}`);
+
+      toast.success(res.data.message);
+      return true;
+    } catch (error) {
+      toast.error(error.response.data.message || "Something went wrong");
+    }
+    return false;
+  },
 }));

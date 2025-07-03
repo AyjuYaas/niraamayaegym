@@ -5,6 +5,7 @@ import IndividualExercise from "./IndividualExercise";
 const AssignedExercises = () => {
   const {
     getAssignedExercises,
+    resetAssignedExercise,
     pendingExercises,
     completedExercises,
     taskDetails,
@@ -13,7 +14,11 @@ const AssignedExercises = () => {
 
   useEffect(() => {
     getAssignedExercises();
-  }, [getAssignedExercises]);
+
+    return () => {
+      resetAssignedExercise();
+    };
+  }, [getAssignedExercises, resetAssignedExercise]);
 
   if (loadAssignedExercises) {
     return (

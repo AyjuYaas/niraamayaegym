@@ -2,6 +2,7 @@ import express from "express";
 import { isTrainer } from "../middlewares/authMiddleware.js";
 import {
   addUser,
+  deleteUser,
   getAssignedUsers,
   getUnassignedUsers,
   getUserDetails,
@@ -37,6 +38,7 @@ router.post("/add-user", addUser);
 router.get("/assigned-users", getAssignedUsers); // For Existing Users
 router.get("/unassigned-users", getUnassignedUsers); // For new Users
 router.get("/user-details/:userId", getUserDetails);
+router.delete("/delete-user/:userId", deleteUser);
 
 // Exercise Routes
 router.post("/exercise/add", addExercise);
