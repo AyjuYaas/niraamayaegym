@@ -10,7 +10,7 @@ export default async function createDefaultTrainerId() {
       await Trainer.create({
         name: "Trainers",
         username: "NiraamayaeTrainers",
-        password: "PushYourself@123",
+        password: "Password@123",
       });
 
       console.log("Default Trainer Created");
