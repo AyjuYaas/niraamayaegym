@@ -34,7 +34,7 @@ export async function userLogin(req, res) {
     res.cookie("auth", token, {
       maxAge: 14 * 24 * 60 * 60 * 1000,
       httpOnly: true, // Cause we use http for development
-      sameSite: "strict", // So that it doesn't store info in another webpage
+      sameSite: "none", // So that it doesn't store info in another webpage
       secure: true,
     });
 
@@ -124,7 +124,7 @@ export async function trainerLogin(req, res) {
     res.cookie("auth", token, {
       maxAge: 14 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "none",
       secure: true,
     });
 
