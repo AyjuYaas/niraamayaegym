@@ -2,7 +2,7 @@ import { useState } from "react";
 import UserProfile from "../../components/UserProfile";
 import { useAuthHook } from "../../hook/useAuthHook";
 import AssignedExercises from "./components/AssignedExercises";
-import UpdatePassword from "./components/updatePassword";
+import UpdatePassword from "./components/UpdatePassword";
 import { FaSearch } from "react-icons/fa";
 import BMICalculator from "./components/BMICalculator";
 import { Link } from "react-router-dom";
